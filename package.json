@@ -1,6 +1,6 @@
 {
   "name": "opentelemetry-azure-function",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "OpenTelemetry Tracing for Azure Function",
   "main": "lib/main/index.js",
   "typings": "lib/main/index.d.ts",
