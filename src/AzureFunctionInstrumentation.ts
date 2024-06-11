@@ -19,7 +19,7 @@ import {
   detectResource,
   setPropagatedResourceAttributes,
 } from './ResourceDetector';
-import {
+import type {
   EndHookOptions,
   ErrorHandlingFunction,
   OpenTelemetryAzureFunctionOptions,

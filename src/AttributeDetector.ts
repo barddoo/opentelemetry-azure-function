@@ -8,7 +8,7 @@ import {
   SEMATTRS_HTTP_USER_AGENT,
 } from '@opentelemetry/semantic-conventions';
 
-import { AzureTriggerInput } from './types';
+import { type AzureTriggerInput } from './types';
 
 const cHttpHeadersToCapture = {
   'user-agent': SEMATTRS_HTTP_USER_AGENT,

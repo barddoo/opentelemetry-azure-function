@@ -10,7 +10,7 @@ import {
 
 export type ErrorHandlingFunction = (error: Error) => Attributes;
 
-export type AzTriggerType =
+export type AzureTriggerType =
   | 'httpTrigger'
   | 'timerTrigger'
   | 'eventGridTrigger'

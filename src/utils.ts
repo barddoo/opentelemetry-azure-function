@@ -18,7 +18,7 @@ import {
   FAASTRIGGERVALUES_TIMER,
 } from '@opentelemetry/semantic-conventions';
 
-import { AzTriggerType, TriggerData, TriggerType } from './types';
+import type { AzureTriggerType, TriggerData, TriggerType } from './types';
 
 export function extractContext(options: TriggerData) {
   const req = options.req;
@@ -65,9 +65,9 @@ export function getTriggerData(
   context: PreInvocationContext | PostInvocationContext,
 ): TriggerData {
   const triggerType = context.invocationContext.options.trigger
-    .type as AzTriggerType;
+    .type as AzureTriggerType;
 
-  const triggerTypeMapping: Record<AzTriggerType, TriggerType> = {
+  const triggerTypeMapping: Record<AzureTriggerType, TriggerType> = {
     httpTrigger: FAASTRIGGERVALUES_HTTP,
     timerTrigger: FAASTRIGGERVALUES_TIMER,
     eventGridTrigger: FAASTRIGGERVALUES_PUBSUB,
