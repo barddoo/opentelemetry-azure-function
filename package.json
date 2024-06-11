@@ -1,19 +1,18 @@
 {
   "name": "opentelemetry-azure-function",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "OpenTelemetry Tracing for Azure Function",
   "main": "lib/main/index.js",
   "typings": "lib/main/index.d.ts",
   "module": "lib/module/index.js",
   "repository": "https://github.com/barddoo/opentelemetry-azure-function.git",
-  "author": "Charles Fonseca",
+  "author": "Charles Fonseca <pseudo.charles@proton.me>",
   "license": "MIT",
   "keywords": [
     "open-telemetry",
     "azure-functions",
     "opentelemetry"
   ],
-  "type": "module",
   "scripts": {
     "build": "run-p build:*",
     "build:main": "tsc -p tsconfig.json",

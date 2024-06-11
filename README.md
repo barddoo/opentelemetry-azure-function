@@ -9,7 +9,20 @@ npm install opentelemetry-azure-function
 ## Usage
 
 ```typescript
-import { AzureFunctionInstrumentation } from 'opentelemetry-azure-function';
+import { initOpenTelemetryAzureFunctionsHooks } from 'opentelemetry-azure-function';
+
+initOpenTelemetryAzureFunctionsHooks();
+// your code
+
+// or
+import {
+  registerTraceStartHook,
+  registerTraceEndHook,
+} from 'opentelemetry-azure-function';
+
+registerTraceStartHook();
+// your code
+registerTraceEndHook();
 ```
 
 ---

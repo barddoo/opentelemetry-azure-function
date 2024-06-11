@@ -4,6 +4,7 @@ import {
   SEMATTRS_FAAS_TRIGGER,
   SEMATTRS_HTTP_HOST,
   SEMATTRS_HTTP_METHOD,
+  SEMATTRS_HTTP_REQUEST_CONTENT_LENGTH,
   SEMATTRS_HTTP_URL,
   SEMATTRS_HTTP_USER_AGENT,
 } from '@opentelemetry/semantic-conventions';
@@ -51,6 +52,8 @@ export function getStartAttributes(
         [SEMATTRS_FAAS_TRIGGER]: triggerType,
         [SEMATTRS_HTTP_METHOD]: req.method || 'GET',
         [SEMATTRS_HTTP_URL]: req.url,
+        [SEMATTRS_HTTP_REQUEST_CONTENT_LENGTH]:
+          req.headers.get('content-length') || '0',
       },
       captureHttpHeaders(req),
     );

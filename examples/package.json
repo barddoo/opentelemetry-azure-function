@@ -1,0 +1,29 @@
+{
+  "name": "example-functions",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/src/functions/*.js",
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc -w",
+    "clean": "rimraf dist",
+    "prestart": "npm run clean && npm run build",
+    "start": "func start",
+    "test": "echo \"No tests yet...\""
+  },
+  "dependencies": {
+    "@azure/functions": "^4.0.0",
+    "@opentelemetry/api": "^1.9.0",
+    "@opentelemetry/auto-instrumentations-node": "^0.47.1",
+    "@opentelemetry/sdk-metrics": "^1.25.0",
+    "@opentelemetry/sdk-node": "^0.52.0",
+    "@opentelemetry/sdk-trace-node": "^1.25.0",
+    "opentelemetry-azure-function": "^0.1.4"
+  },
+  "devDependencies": {
+    "@types/node": "18.x",
+    "azure-functions-core-tools": "^4.x",
+    "rimraf": "^5.0.0",
+    "typescript": "^4.0.0"
+  }
+}

@@ -28,7 +28,7 @@ import type {
 } from './types';
 import { extractContext, getStatus, getTracer, getTriggerData } from './utils';
 
-const spanSymbol = Symbol('Az Span');
+const spanKey = 'Az Span';
 let endHookRegistered = false;
 
 const defaultErrorHandler: ErrorHandlingFunction = (error) => {
@@ -76,8 +76,7 @@ export function registerTraceStartHook(options?: StartHookOptions): void {
       trace.setSpan(parentCtx, span),
       azContext.functionHandler,
     );
-    // @ts-ignore
-    azContext.hookData[spanSymbol] = span;
+    azContext.hookData[spanKey] = span;
   });
 }
 
@@ -85,8 +84,7 @@ function registerTraceEndHook(options?: EndHookOptions): void {
   const errorHandler = options?.errorHandler ?? defaultErrorHandler;
   const requestAttributesOnEndHook = options?.requestAttributesOnEndHook;
   app.hook.postInvocation((context) => {
-    // @ts-ignore
-    const span: Span = context.hookData[spanSymbol];
+    const span = context.hookData[spanKey] as Span;
     if (span != null) {
       if (requestAttributesOnEndHook != null) {
         const triggerData = getTriggerData(context);
@@ -98,7 +96,7 @@ function registerTraceEndHook(options?: EndHookOptions): void {
         span.setAttribute(SEMATTRS_HTTP_STATUS_CODE, status);
       }
       if (context.error != null) {
-        const error = context.error as any;
+        const error = context.error as Error;
         span.setAttributes(errorHandler(error));
         span.setStatus({ code: SpanStatusCode.ERROR });
       } else {
@@ -110,7 +108,7 @@ function registerTraceEndHook(options?: EndHookOptions): void {
   endHookRegistered = true;
 }
 
-export function initOpenTelemetryAzureHooks(
+export function initOpenTelemetryAzureFunctionsHooks(
   options?: OpenTelemetryAzureFunctionOptions,
 ): void {
   const tracer = options?.tracer ?? getTracer();

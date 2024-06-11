@@ -1,4 +1,4 @@
-export * from './AzureFunctionInstrumentation';
+export * from './AzureFunctionHooks';
 export type {
   AzureTriggerInput,
   TriggerData,
