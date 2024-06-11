@@ -61,7 +61,7 @@ const propagatedResourceAttributesKey = Symbol(
 export function setPropagatedResourceAttributes(
   span: Span,
   resourceAttributes: Record<string, string>,
-) {
+): void {
   if (span.isRecording() && resourceAttributes != null) {
     // @ts-ignore
     span[propagatedResourceAttributesKey] = resourceAttributes;

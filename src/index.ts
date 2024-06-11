@@ -1,1 +1,1 @@
-export * from './AzureFunctionHooks';
+export * from './AzureFunctionInstrumentation';

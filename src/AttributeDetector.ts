@@ -8,6 +8,8 @@ import {
   SEMATTRS_HTTP_USER_AGENT,
 } from '@opentelemetry/semantic-conventions';
 
+import { AzureTriggerInput } from './types';
+
 const cHttpHeadersToCapture = {
   'user-agent': SEMATTRS_HTTP_USER_AGENT,
   host: SEMATTRS_HTTP_HOST,
@@ -26,7 +28,7 @@ function captureHttpHeaders(req: HttpRequest): Record<string, string> {
   return attrs;
 }
 
-function headerGetter(req: any, headerName: string) {
+function headerGetter(req: any, headerName: string): any {
   if (req instanceof HttpRequest) {
     return req.headers.get(headerName);
   } else {
@@ -35,8 +37,8 @@ function headerGetter(req: any, headerName: string) {
 }
 
 export function getStartAttributes(
+  req: AzureTriggerInput,
   triggerType: string,
-  req: unknown,
 ): Record<string, string> {
   let attributes: Record<string, string>;
   if (

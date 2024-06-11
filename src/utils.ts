@@ -2,6 +2,7 @@ import {
   HttpRequest,
   HttpResponse,
   PostInvocationContext,
+  PreInvocationContext,
 } from '@azure/functions';
 import {
   propagation,
@@ -10,26 +11,32 @@ import {
   trace,
   Tracer,
 } from '@opentelemetry/api';
-import { FAASTRIGGERVALUES_HTTP } from '@opentelemetry/semantic-conventions';
+import {
+  FAASTRIGGERVALUES_HTTP,
+  FAASTRIGGERVALUES_OTHER,
+  FAASTRIGGERVALUES_PUBSUB,
+  FAASTRIGGERVALUES_TIMER,
+} from '@opentelemetry/semantic-conventions';
 
-export function extractContext(triggerType: string, req: any) {
-  if (triggerType === FAASTRIGGERVALUES_HTTP && req != null) {
-    if (req instanceof HttpRequest) {
-      const headersTextMapGetter: TextMapGetter<typeof req.headers> = {
-        get(carrier, key) {
-          return carrier?.get(key) ?? undefined;
-        },
-        keys(carrier) {
-          return Array.from(carrier.keys());
-        },
-      };
-      return propagation.extract(
-        ROOT_CONTEXT,
-        req.headers,
-        headersTextMapGetter,
-      );
-    }
-    return propagation.extract(ROOT_CONTEXT, req.headers);
+import { AzTriggerType, TriggerData, TriggerType } from './types';
+
+export function extractContext(options: TriggerData) {
+  const req = options.req;
+  const triggerType = options.triggerType;
+  if (
+    triggerType === FAASTRIGGERVALUES_HTTP &&
+    req != null &&
+    req instanceof HttpRequest
+  ) {
+    const headersTextMapGetter: TextMapGetter<typeof req.headers> = {
+      get(carrier, key) {
+        return carrier?.get(key) ?? undefined;
+      },
+      keys(carrier) {
+        return Array.from(carrier.keys());
+      },
+    };
+    return propagation.extract(ROOT_CONTEXT, req.headers, headersTextMapGetter);
   }
   return ROOT_CONTEXT;
 }
@@ -52,4 +59,22 @@ export function getTracer() {
     tracer = trace.getTracer('opentelemetry-azure-functions');
   }
   return tracer;
+}
+
+export function getTriggerData(
+  context: PreInvocationContext | PostInvocationContext,
+): TriggerData {
+  const triggerType = context.invocationContext.options.trigger
+    .type as AzTriggerType;
+
+  const triggerTypeMapping: Record<AzTriggerType, TriggerType> = {
+    httpTrigger: FAASTRIGGERVALUES_HTTP,
+    timerTrigger: FAASTRIGGERVALUES_TIMER,
+    eventGridTrigger: FAASTRIGGERVALUES_PUBSUB,
+    queueTrigger: FAASTRIGGERVALUES_OTHER,
+  };
+  return {
+    triggerType: triggerTypeMapping[triggerType] ?? FAASTRIGGERVALUES_OTHER,
+    req: context.inputs[0],
+  };
 }
